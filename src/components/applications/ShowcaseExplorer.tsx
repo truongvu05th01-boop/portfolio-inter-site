@@ -53,7 +53,7 @@ const ShowcaseExplorer: React.FC<ShowcaseExplorerProps> = (props) => {
             onInteract={props.onInteract}
             minimizeWindow={props.onMinimize}
             bottomLeftText={
-                "© 2026 Nguyen Duong Truong Vu | Based on the licensed product by Vu."
+                "© 2026 NguyenDuongTruongVu | Based on the licensed product by Vu."
             }
         >
             <Router
