@@ -6,10 +6,6 @@
     {
       "source": "/os/(.*)",
       "destination": "/os/index.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/os/index.html"
     }
   ]
 }
