@@ -4,8 +4,8 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/os/(.*)",
-      "destination": "/os/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
