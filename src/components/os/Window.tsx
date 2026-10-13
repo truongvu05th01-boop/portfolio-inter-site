@@ -58,10 +58,10 @@ const Window: React.FC<WindowProps> = (props) => {
 
     const [isMaximized, setIsMaximized] = useState(embedded);
     const [preMaxSize, setPreMaxSize] = useState({
-        width,
-        height,
-        top,
-        left,
+        width: props.width,
+        height: props.height,
+        top: props.top,
+        left: props.left,
     });
 
     const [isDragging, setIsDragging] = useState(false);

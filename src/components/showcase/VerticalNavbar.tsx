@@ -31,8 +31,10 @@ const VerticalNavbar: React.FC<VerticalNavbarProps> = (props) => {
     return !isHome ? (
         <div style={styles.navbar}>
             <div style={styles.header}>
-                <h1 style={styles.headerText}>Truong</h1>
-                <h1 style={styles.headerText}>Vu</h1>
+                <div style={styles.nameRow}>
+                    <h1 style={styles.headerText}>Truong</h1>
+                    <h1 style={styles.headerText}>Vu</h1>
+                </div>
                 <h3 style={styles.headerShowcase}>Showcase 2026</h3>
             </div>
             <div style={styles.links}>
@@ -104,7 +106,13 @@ const styles: StyleSheetCSS = {
         flexDirection: 'column',
         marginBottom: 64,
     },
+    nameRow: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        columnGap: 8,
+    },
     headerText: {
+        margin: 0,
         fontSize: 38,
         lineHeight: 1,
     },

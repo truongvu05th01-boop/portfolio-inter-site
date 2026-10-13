@@ -47,13 +47,13 @@ const ShowcaseExplorer: React.FC<ShowcaseExplorerProps> = (props) => {
             left={56}
             width={initWidth}
             height={initHeight}
-            windowTitle="Nguyễn Dương Trường Vũ - My Showcase"
+            windowTitle="Nguyen Duong Truong Vu - My Showcase"
             windowBarIcon="windowExplorerIcon"
             closeWindow={props.onClose}
             onInteract={props.onInteract}
             minimizeWindow={props.onMinimize}
             bottomLeftText={
-                "© 2026 Nguyễn Dương Trường Vũ | Based on the licensed product by NguyenDuongTruongVu."
+                "© 2026 Nguyen Duong Truong Vu | Based on the licensed product by Vu."
             }
         >
             <Router
