@@ -3,12 +3,35 @@ import React, { useState } from 'react';
 import house from '../../../assets/audio/house_master.mp3';
 // @ts-ignore
 import edge from '../../../assets/audio/edge_unmastered.mp3';
+// @ts-ignore
+import loThuongNhau from '../../../assets/audio/lothuongnhau.mp3';
 import houseProject from '../../../assets/pictures/projects/audio/houseProject.png';
+import timEmProject from '../../../assets/pictures/projects/audio/timEm.png';
+import loThuongNhauImage from '../../../assets/pictures/projects/audio/loThuongNhau.png';
 import { MusicPlayer } from '../../general';
 
 export interface MusicProjectsProps {}
 
-const MusicProjects: React.FC<MusicProjectsProps> = (props) => {
+const songs = [
+    {
+        title: 'Come My Way',
+        subtitle: 'SonTung M-TP',
+        src: house,
+        image: houseProject,
+        description:
+            'There is so much I love about this piece. I am particularly proud of its structure and three-dimensional contrast: the playful, optimistic energy of the opening and the first climax, shifting into an emotionally charged and exhilarating transition, before plunging into the darkness of the finale and the final climax.',
+    },
+    {
+        title: 'Tim Em',
+        subtitle: 'HngLe',
+        src: edge,
+        image: timEmProject,
+        description:
+            'Unlike the energetic pace of my previous projects, *Tìm em* serves as an emotional, quiet interlude in my musical journey. Written during still nights, the song carries a touch of nostalgia and personal reflection. It acts as a form of self-expression—a safe space where I can let my mind unwind and momentarily step away from the rigid logic of coding. Every sound and rhythm was carefully crafted to convey a sense of peace tinged with a hint of wistful longing. I hope that as the melody plays, you, too, will find a moment of quiet resonance.',
+    },
+];
+
+const MusicProjects: React.FC<MusicProjectsProps> = () => {
     const [currentSong, setCurrentSong] = useState<string>('');
 
     return (
@@ -48,50 +71,84 @@ I struggled and started over several times, unable to find a visual style and tr
             </p>
             <br />
 
+            {songs.map((song, index) => (
+                <React.Fragment key={song.title}>
+                    {index === 1 && (
+                        <>
+                            <h2>Tim Em?</h2>
+                            <br />
+                            <p>
+                                Contrasting with the energy of my previous
+                                projects, Tìm em (Find You) explores a softer,
+                                more emotional side of my musical journey. This
+                                track represents a personal search for harmony
+                                and resonance. The process of refining its
+                                melodies taught me patience and the art of
+                                crafting a deep, atmospheric soundscape.
+                            </p>
+                            <br />
+                        </>
+                    )}
+                    <MusicPlayer
+                        src={song.src}
+                        title={song.title}
+                        subtitle={song.subtitle}
+                        currentSong={currentSong}
+                        setCurrentSong={setCurrentSong}
+                    />
+                    <br />
+                    <div className="captioned-image">
+                        <img src={song.image} alt={song.title} />
+                        <p>
+                            <sub>
+                                <b>{`Figure ${index + 1}:`}</b> {song.title}
+                            </sub>
+                        </p>
+                    </div>
+                    <p>{song.description}</p>
+                    <br />
+                </React.Fragment>
+            ))}
+            <h2>Lo thuong nhau</h2>
+            <br />
+            <p>
+                The gentle ballad melody draws the listener into a space of shy
+                reserve and quiet contemplation. It captures that precarious
+                feeling of standing on the thin line between joy and hidden,
+                unspoken worries. You might sense a soft, lingering ache—for to
+                love someone is to open your heart, balancing a deep longing for
+                connection with the fear of things left unfinished or the
+                presence of an invisible distance. Yet, beneath this faint,
+                melancholic undertone lies a strange, comforting warmth; for to
+                have "happened to fall for" someone with such sincerity is, in
+                itself, a truly beautiful experience.
+            </p>
+            <br />
+            <p>
+                Whenever the melody plays, it becomes a private sanctuary—a
+                place where you can let go of pent-up emotions and freely drift
+                back to the memory of a person or a moment that once stirred
+                your heart.
+            </p>
+            <br />
             <MusicPlayer
-                src={house}
-                title="Come My Way"
-                subtitle="SonTung M-TP - 2026"
+                src={loThuongNhau}
+                title="Lo thuong nhau"
+                subtitle="Mounter x NguyenHung"
                 currentSong={currentSong}
                 setCurrentSong={setCurrentSong}
             />
-
-            <br />
             <br />
             <div className="captioned-image">
-                <img src={houseProject} alt="" />
+                <img src={loThuongNhauImage} alt="Lo thuong nhau" />
                 <p>
                     <sub>
-                        <b>Figure 1:</b> Come My Way
+                        <b>Figure 3 :</b> Lo thuong nhau :)
                     </sub>
                 </p>
             </div>
-            <p>
-                There is so much I love about this piece. I am particularly proud of its structure and three-dimensional contrast: the playful, optimistic energy of the opening and the first climax, shifting into an emotionally charged and exhilarating transition, before plunging into the darkness of the finale and the final climax.
-            </p>
-            <br />
-            <h2>Tim Em?</h2>
-            <br />
-            <p>
-                Contrasting with the energy of my previous projects, Tìm em (Find You) explores a softer, more emotional side of my musical journey. This track represents a personal search for harmony and resonance. The process of refining its melodies taught me patience and the art of crafting a deep, atmospheric soundscape.
-            </p>
-            <br />
-            <MusicPlayer
-                src={edge}
-                title="Tim Em"
-                subtitle="HngLe - 2026"
-                currentSong={currentSong}
-                setCurrentSong={setCurrentSong}
-            />
-            <br />
-            <p>
-                Unlike the energetic pace of my previous projects, *Tìm em* serves as an emotional, quiet interlude in my musical journey. Written during still nights, the song carries a touch of nostalgia and personal reflection. It acts as a form of self-expression—a safe space where I can let my mind unwind and momentarily step away from the rigid logic of coding. Every sound and rhythm was carefully crafted to convey a sense of peace tinged with a hint of wistful longing. I hope that as the melody plays, you, too, will find a moment of quiet resonance.
-            </p>
-            <br />
         </div>
     );
 };
-
-// const styles: StyleSheetCSS = {};
 
 export default MusicProjects;

@@ -9,7 +9,7 @@ import colors from '../../constants/colors';
 import { motion, Variants } from 'framer-motion';
 
 export interface MusicPlayerProps {
-    src: string;
+    src?: string;
     title: string;
     subtitle: string;
     currentSong: string;
@@ -18,48 +18,56 @@ export interface MusicPlayerProps {
 
 const MusicPlayer: React.FC<MusicPlayerProps> = (props) => {
     const [isPlaying, setIsPlaying] = useState(false);
-    const audioRef = useRef(new Audio(props.src));
+    const audioRef = useRef<HTMLAudioElement | null>(
+        props.src ? new Audio(props.src) : null
+    );
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(1);
 
-    // set current time
     useEffect(() => {
-        audioRef.current.addEventListener('timeupdate', () => {
-            setCurrentTime(audioRef.current.currentTime);
-            setDuration(audioRef.current.duration);
-            if (audioRef.current.currentTime === audioRef.current.duration) {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        const updateTime = () => {
+            setCurrentTime(audio.currentTime);
+            setDuration(audio.duration);
+            if (audio.currentTime === audio.duration) {
                 setIsPlaying(false);
             }
-        });
+        };
+
+        audio.addEventListener('timeupdate', updateTime);
+        return () => audio.removeEventListener('timeupdate', updateTime);
     }, []);
 
-    // fast fowrad 15 seconds
     const fastForward = () => {
-        audioRef.current.currentTime += 15;
+        if (audioRef.current) audioRef.current.currentTime += 15;
     };
 
-    // fast rewind to start of song
     const fastRewind = () => {
-        audioRef.current.currentTime = 0;
+        if (audioRef.current) audioRef.current.currentTime = 0;
     };
 
     const togglePlay = () => {
+        if (!audioRef.current) return;
+
         if (isPlaying) {
-            // setCdState(CDState.easeIn);
             setIsPlaying(false);
         } else {
-            // setCdState(CDState.easeOut);
             setIsPlaying(true);
             props.setCurrentSong(props.title);
         }
     };
 
     useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
         if (props.currentSong === props.title) {
-            audioRef.current.play();
+            audio.play();
             setIsPlaying(true);
         } else {
-            audioRef.current.pause();
+            audio.pause();
             setIsPlaying(false);
         }
     }, [props.currentSong, props.title]);
@@ -72,15 +80,20 @@ const MusicPlayer: React.FC<MusicPlayerProps> = (props) => {
     };
 
     useEffect(() => {
-        if (isPlaying) audioRef.current.play();
-        else audioRef.current.pause();
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        if (isPlaying) audio.play();
+        else audio.pause();
     }, [isPlaying]);
 
     useEffect(() => {
-        audioRef.current.currentTime = 0;
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        audio.currentTime = 0;
         return () => {
-            // eslint-disable-next-line
-            audioRef.current.pause();
+            audio.pause();
         };
     }, []);
 
@@ -95,8 +108,12 @@ const MusicPlayer: React.FC<MusicPlayerProps> = (props) => {
                         variants={vars}
                         animate={isPlaying ? 'play' : 'pause'}
                         src={CDIcon}
-                        style={styles.cd}
-                        onMouseDown={togglePlay}
+                        style={
+                            audioRef.current
+                                ? styles.cd
+                                : Object.assign({}, styles.cd, styles.disabledControl)
+                        }
+                        onMouseDown={audioRef.current ? togglePlay : undefined}
                         alt=""
                     />
                 </div>
@@ -126,9 +143,18 @@ const MusicPlayer: React.FC<MusicPlayerProps> = (props) => {
                     </div>
                     <div style={styles.playerControls}>
                         <div
-                            style={styles.controlButton}
+                            style={
+                                audioRef.current
+                                    ? styles.controlButton
+                                    : Object.assign(
+                                          {},
+                                          styles.controlButton,
+                                          styles.disabledControl
+                                      )
+                            }
                             className="site-button"
-                            onMouseDown={fastRewind}
+                            onMouseDown={audioRef.current ? fastRewind : undefined}
+                            aria-disabled={!audioRef.current}
                         >
                             <img
                                 src={RewindIcon}
@@ -137,9 +163,18 @@ const MusicPlayer: React.FC<MusicPlayerProps> = (props) => {
                             />
                         </div>
                         <div
-                            style={styles.controlButton}
+                            style={
+                                audioRef.current
+                                    ? styles.controlButton
+                                    : Object.assign(
+                                          {},
+                                          styles.controlButton,
+                                          styles.disabledControl
+                                      )
+                            }
                             className="site-button"
-                            onMouseDown={togglePlay}
+                            onMouseDown={audioRef.current ? togglePlay : undefined}
+                            aria-disabled={!audioRef.current}
                         >
                             <img
                                 src={isPlaying ? PauseIcon : PlayIcon}
@@ -148,9 +183,18 @@ const MusicPlayer: React.FC<MusicPlayerProps> = (props) => {
                             />
                         </div>
                         <div
-                            style={styles.controlButton}
+                            style={
+                                audioRef.current
+                                    ? styles.controlButton
+                                    : Object.assign(
+                                          {},
+                                          styles.controlButton,
+                                          styles.disabledControl
+                                      )
+                            }
                             className="site-button"
-                            onMouseDown={fastForward}
+                            onMouseDown={audioRef.current ? fastForward : undefined}
+                            aria-disabled={!audioRef.current}
                         >
                             <img
                                 src={ForwardIcon}
@@ -249,6 +293,11 @@ const styles: StyleSheetCSS = {
         width: 56,
         height: 56,
         cursor: 'pointer',
+    },
+    disabledControl: {
+        cursor: 'not-allowed',
+        opacity: 0.55,
+        pointerEvents: 'none',
     },
 };
 
